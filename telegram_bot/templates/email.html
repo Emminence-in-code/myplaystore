@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Inline CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .footer {
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .center{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>HERES YOUR TOKEN</h1>
+        </div>
+        <div class="content">
+            <p>Hello {{ receiver_name }},</p>
+            <p>We just wanted to confirm if you are the one that used this email to access the telegram bot</p>
+            <img src="https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/back01.jpg" alt="Image 3" class="image">
+            <div class="center">
+                    <h4>Heres the Code</h4>
+            <p>{{token}}</p>
+            </div>
+        
+        </p>
+        </div>
+        <div class="footer">
+            &copy; 2024 MYPLAYSTORE.ng Inc. No rights reserved.
+        </div>
+    </div>
+</body>
+</html>

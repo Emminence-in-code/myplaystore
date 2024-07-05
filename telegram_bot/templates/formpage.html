@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="space-y-12 p-3 px-10">
+        <div class="border-b border-gray-900/10 pb-12">
+          <h2 class="font-semibold leading-7 text-xl text-gray-900">
+            Upload Your App Today
+          </h2>
+          <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+              <label
+                htmlFor="full_name"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Full Name
+              </label>
+              <div class="mt-2">
+                <input
+                  required
+                  type="text"
+                  name="full_name"
+                  id="full_name"
+                  autocomplete="given-name"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-4">
+              <label
+                htmlFor="email"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Email address
+              </label>
+              <div class="mt-2">
+                <input
+                  required
+                  disabled
+                  value="{{email}}"
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  class="block w-full rounded-md border-0 px-5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 bg-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-4">
+              <label
+                htmlFor="company_name"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Company/Developer Name
+              </label>
+              <div class="mt-2">
+                <input
+                  required
+                  id="company_name"
+                  name="company_name"
+                  type="text"
+                  autocomplete="username"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-4">
+              <label
+                htmlFor="app_name"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                App Title
+              </label>
+              <div class="mt-2">
+                <input
+                  required
+                  id="app_name"
+                  name="app_name"
+                  type="text"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label
+                htmlFor="platform"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                App Platform
+              </label>
+              <div class="mt-2">
+                <select
+                  id="platform"
+                  name="platform"
+                  class="block w-full rounded-md border-0 px-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                >
+                  <option>Android</option>
+                  <option>IOS</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="sm:col-span-3">
+              <label
+                htmlFor="category"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                App Category
+              </label>
+              <div class="mt-2">
+                <select
+                  id="category"
+                  name="category"
+                  class="block w-full rounded-md border-0 px-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                >
+                  <option>App</option>
+                  <option>Games</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-span-full">
+              <label
+                htmlFor="version"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Version
+              </label>
+              <div class="mt-2">
+                <input
+                  required
+                  type="text"
+                  name="version"
+                  id="version"
+                  autocomplete="version"
+                  placeholder="V 1.0"
+                  class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-2 sm:col-start-1">
+              <label
+                htmlFor="file_size"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Estimated App File Size
+              </label>
+              <div class="mt-2">
+                <input
+                  required
+                  type="text"
+                  name="estimated_size"
+                  id="file_size"
+                  autocomplete="address-level2"
+                  placeholder="2.3 MB"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 p-2 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="w-full py-9 bg-gray-50 rounded-2xl border border-gray-300 gap-3 grid border-dashed"
+      >
+        <div class="grid gap-1">
+          <svg
+            class="mx-auto"
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <!-- todo  -->
+            <!-- <PaperClipIcon class="text-indigo-600" /> -->
+          </svg>
+          <h2 class="text-center text-gray-400 text-xs leading-4">
+            APP file less than 2GB
+          </h2>
+        </div>
+        <div class="grid gap-2">
+          <div class="flex items-center justify-center">
+            <label>
+              <input type="file" name="app"  />
+              <div
+                class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
+              >
+                Choose File
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-sm space-y-3 mt-16">
+        <h3 class="mb-5 text-xl text-center">Shots For Your App</h3>
+
+        <label htmlFor="small-file-input  " class="sr-only">
+          Choose Image
+        </label>
+        <input
+          required
+          type="file"
+          name="image1"
+          id="small-file-input  "
+          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
+        />
+
+        <label htmlFor="file-input required -medium" class="sr-only">
+          Choose Image
+        </label>
+        <input
+          type="file"
+          name="image2"
+          id="file-input required -medium"
+          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4"
+        />
+
+        <label htmlFor="large-file-input required " class="sr-only">
+          Choose Image
+        </label>
+        <input
+          type="file"
+          name="image3"
+          id="large-file-input "
+          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 file:sm:py-5"
+        />
+      </div>
+      <div class="mt-6 flex items-center justify-end gap-x-6">
+        <button
+          type="button"
+          class="text-sm font-semibold leading-6 text-gray-900"
+          id="clear_btn"
+          type="reset"
+        >
+          Clear All
+        </button>
+        <button
+          type="submit"
+          class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Upload App
+        </button>
+      </div>
+    </form>
+    {% include "scripts.html" %}
+    <script>
+      document.getElementById("clear_btn").addEventListener("click", (e) => {
+        if (window.confirm("Clearing form will empty all data in this form")) {
+          document.querySelector("form").reset();
+          alert("Cleared form Succesfully");
+        }
+      });
+    </script>
+  </body>
+</html>

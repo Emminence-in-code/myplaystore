@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm Email</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <style>
+    .form-container {
+      width: 70%;
+      max-width: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+  <body>
+    <div class="form-container">
+      <div class="" id="send_email">
+        <form method="post" id="email-form">
+          {% csrf_token %}
+          <h3>Enter Your Email Address</h3>
+          <input
+            type="email"
+            name="email"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+          <br />
+          <button
+            type="submit"
+            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+
+      <div id="confirm_email" hidden>
+        <h3>Ok We sent a confirmation code to your email</h3>
+        <form action="" method="post" id="token-form">
+          {% csrf_token %}
+          <input
+            type="text"
+            name="confirm_token"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+          <br />
+          <button
+            type="submit"
+            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Confirm
+          </button>
+        </form>
+      </div>
+    </div>
+
+    {% include "scripts.html" %}
+    <script>
+      const getId = (id) => document.getElementById(id);
+      const hideItem = (e) => (e.style.display = "none");
+      const showItem = (e) => (e.style.display = "block");
+
+      const send_email = getId("send_email");
+      const confirm_email = getId("confirm_email");
+
+      getId("email-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        hideItem(send_email);
+        showItem(confirm_email);
+        // send confirm code to email
+        const request = fetch("{% url 'auth' username %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFTOKEN": getId("email-form").querySelector(
+              "input[name=csrfmiddlewaretoken]"
+            ).value,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: document.querySelector("input[name=email]").value,
+          }),
+        });
+      });
+
+      getId("token-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const request = await fetch("{% url 'token' username %}", {
+          method: "POST",
+          headers: {
+            "X-CSRFTOKEN": getId("token-form").querySelector(
+              "input[name=csrfmiddlewaretoken]"
+            ).value,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            confirm_token: document.querySelector("input[name=confirm_token]")
+              .value,
+          }),
+        });
+        if (request.ok) {
+          window.location.href = "{% url 'upload' username %}";
+        }
+      });
+    </script>
+  </body>
+</html>

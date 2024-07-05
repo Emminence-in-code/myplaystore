@@ -1,0 +1,1 @@
+{% for app in uploaded_apps %} {{app.email}} <a href="{{app.app.url}}" download>{{app.app_name}}</a>{% empty %} no apps {% endfor %}
