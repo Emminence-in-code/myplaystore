@@ -116,7 +116,6 @@ def sendMessage(chatId,message):
         ]
     }
     x = requests.post('https://api.telegram.org/bot7335489186:AAGvytPLouKdRyPMkd-ew7Or-SJq73gumsI/sendMessage',{"chat_id":chatId,"text":message,'reply_markup': json.dumps(inline_keyboard)})
-    print(x.status_code,x.json())
 
 
 def formView(request,username):
@@ -167,17 +166,6 @@ def redirect_to_auth(username):
 
 def successPage(request):
     return render(request,'success.html')
-# TODO CREATE VIEW FOR ADMIN TO MANAGE AND DOWNLOAD APPS
-def manager_view(request):
-    if request.user and request.user.is_staff:
-        apps = None
-        try:
-            apps = UploadedApp.objects.all()
-        except:
-            pass
-        return render(request,'admin.html',{'uploaded_apps':apps})
-    else:
-        return HttpResponse('<b>NOT ALLOWED 404 </b>')
 
 
 # !TELEGRAM FUNCTIONS

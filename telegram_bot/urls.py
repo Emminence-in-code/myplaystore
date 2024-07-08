@@ -5,7 +5,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('',views.index,name='home'),
-    path('app-admin',views.manager_view,name='app-admin'),
     # templates
     path('form/<str:username>',views.formView,name='upload'),
     path('auth/<str:username>',views.validateEmailView,name='signin'),
