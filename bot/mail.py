@@ -4,17 +4,19 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
+
 def mail_user(
         reciever_name,
         token,
+        email
 ):
-    
+
     context = {
     "receiver_name":reciever_name,
     "token":token
     }
 
-    receiver_email = "lordyacey@gmail.com"
+    receiver_email = email
     template_name = "email.html"
     convert_to_html_content =  render_to_string(
     template_name=template_name,

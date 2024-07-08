@@ -8,7 +8,9 @@
   </head>
   <body>
     <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
+      {% for msg in messages %}
+      <p class="text-red-400">{{msg}}</p>
+      {% endfor %} {% csrf_token %}
       <div class="space-y-12 p-3 px-10">
         <div class="border-b border-gray-900/10 pb-12">
           <h2 class="font-semibold leading-7 text-xl text-gray-900">
@@ -195,7 +197,7 @@
         <div class="grid gap-2">
           <div class="flex items-center justify-center">
             <label>
-              <input type="file" name="app"  />
+              <input type="file" name="app" />
               <div
                 class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
               >

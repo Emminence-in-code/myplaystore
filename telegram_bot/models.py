@@ -1,7 +1,6 @@
 from typing import Any, Iterable
 from django.db import models
 
-from bot.mail import mail_user
 
 # Create your models here.
 def user_directory_path(x,y):

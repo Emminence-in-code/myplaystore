@@ -9,17 +9,28 @@
 
   <style>
     .form-container {
-      width: 70%;
-      max-width: 500px;
       display: flex;
       justify-content: center;
+      height: 100vh;
       align-items: center;
+    }
+    #error-text {
+      color: rgb(230, 40, 40);
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .cont {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      width: 80vw;
     }
   </style>
   <body>
     <div class="form-container">
-      <div class="" id="send_email">
-        <form method="post" id="email-form">
+      <div id="send_email">
+        <form method="post" id="email-form" class="cont">
           {% csrf_token %}
           <h3>Enter Your Email Address</h3>
           <input
@@ -39,8 +50,9 @@
 
       <div id="confirm_email" hidden>
         <h3>Ok We sent a confirmation code to your email</h3>
-        <form action="" method="post" id="token-form">
+        <form class="cont" method="post" id="token-form">
           {% csrf_token %}
+          <div id="error-text"></div>
           <input
             type="text"
             name="confirm_token"
@@ -68,6 +80,13 @@
 
       getId("email-form").addEventListener("submit", (e) => {
         e.preventDefault();
+        if (
+          document.querySelector("input[name=email]").value == "" ||
+          document.querySelector("input[name=email]").value == null ||
+          document.querySelector("input[name=email]").value.indexOf("@") == -1
+        ) {
+          return;
+        }
         hideItem(send_email);
         showItem(confirm_email);
         // send confirm code to email
@@ -86,6 +105,8 @@
       });
 
       getId("token-form").addEventListener("submit", async (e) => {
+        // clear error text
+        document.getElementById("error-text").innerHTML = "";
         e.preventDefault();
         const request = await fetch("{% url 'token' username %}", {
           method: "POST",
@@ -102,6 +123,9 @@
         });
         if (request.ok) {
           window.location.href = "{% url 'upload' username %}";
+        } else {
+          var txt = await request.json();
+          document.getElementById("error-text").innerHTML = txt.error;
         }
       });
     </script>

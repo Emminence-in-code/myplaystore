@@ -1,20 +1,25 @@
-from django.conf import settings
-from django.shortcuts import render,redirect
-from django.http import Http404, HttpResponse, JsonResponse
-from rest_framework.decorators import api_view,permission_classes
-from rest_framework.response import Response
-import requests,json
+import json
 from pathlib import Path
+
+import requests
+from django.conf import settings
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from telegram import Bot, Update
-from telegram.ext import Application,CommandHandler
+from telegram.ext import Application, CommandHandler
+
 from bot.command_routing import MY_ROUTES
+from bot.mail import mail_user
 from flat_tokens.models import Token
 from telegram_bot.models import CustomUser
-from .models import CustomUser,UploadedApp
-from bot.mail import mail_user
+
+from .models import CustomUser, UploadedApp
 from .utils import generate_token as generate
-from rest_framework.permissions import AllowAny
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,6 +48,15 @@ def index(request):
                     )
             elif command == '/clear':
                 MY_ROUTES['/clear'](update)
+            
+            # ! RUN OTHER COMMANDS
+            else:
+                try:
+                    MY_ROUTES.get(command)(update)
+                except:
+                    # tell user an error occured
+                    
+                    pass
         else:
             # handle message
             pass
@@ -63,7 +77,8 @@ def confirmEmail(request,username):
         )
         mail_user(
             reciever_name=username,
-            token=token.token
+            token=token.token,
+            email=user.email
         )
     return Response({'status': 'success'})
 
@@ -88,7 +103,7 @@ def confirmToken(request,username):
         return Response({'status':'token is valid'},200)
     else:
         # handle invalid token 
-        return Response(status=400)
+        return Response(status=400,data={'error':'Confirmation Code is invalid or expired'})
 
 def sendMessage(chatId,message):
     inline_keyboard = {
@@ -112,28 +127,29 @@ def formView(request,username):
         return redirect_to_auth(username=username)
     user = user.first()
     if request.method == 'POST':
-        data= request.POST
-        print(request.FILES)
-        new_app_upload = UploadedApp.objects.create(
-            user = user,
-            full_name = data['full_name'],
-            email = user.email,
-            company_name = data['company_name'],
-            app_name = data['app_name'],
-            platform = data['platform'],
-            category = data['category'],
-            version = data['version'],
-            estimated_size = data['estimated_size'],
-            image1 = request.FILES.get('image1'),
-            image2 = request.FILES.get('image2'),
-            image3 = request.FILES.get('image3'),
-            app = request.FILES['app'],
+        try:
+            data= request.POST
+            new_app_upload = UploadedApp.objects.create(
+                user = user,
+                full_name = data['full_name'],
+                email = user.email,
+                company_name = data['company_name'],
+                app_name = data['app_name'],
+                platform = data['platform'],
+                category = data['category'],
+                version = data['version'],
+                estimated_size = data['estimated_size'],
+                image1 = request.FILES.get('image1'),
+                image2 = request.FILES.get('image2'),
+                image3 = request.FILES.get('image3'),
+                app = request.FILES['app'],
 
-        )
-        new_app_upload.save()
+            )
+            new_app_upload.save()
+            return redirect('success-page')
+        except:
+            messages.error(request,'File Upload Failed')
 
-    if request.method == 'POST':
-        print(request.POST)
     return render(request,'formpage.html',{'email':user.email})
 
 
@@ -149,6 +165,8 @@ def redirect_to_auth(username):
     return redirect('signin',username=username)
 
 
+def successPage(request):
+    return render(request,'success.html')
 # TODO CREATE VIEW FOR ADMIN TO MANAGE AND DOWNLOAD APPS
 def manager_view(request):
     if request.user and request.user.is_staff:
