@@ -132,6 +132,7 @@ def formView(request,username):
                 user = user,
                 full_name = data['full_name'],
                 email = user.email,
+                description = data['desc'],
                 company_name = data['company_name'],
                 app_name = data['app_name'],
                 platform = data['platform'],
@@ -141,6 +142,8 @@ def formView(request,username):
                 image1 = request.FILES.get('image1'),
                 image2 = request.FILES.get('image2'),
                 image3 = request.FILES.get('image3'),
+                image4 = request.FILES.get('image4'),
+                image5 = request.FILES.get('image5'),
                 app = request.FILES['app'],
 
             )

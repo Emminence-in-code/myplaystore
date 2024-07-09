@@ -24,6 +24,7 @@ class CustomUser(models.Model):
 class UploadedApp(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     full_name = models.CharField(max_length=200)
+    description = models.TextField(default='')
     email = models.EmailField( max_length=254)
     company_name =  models.CharField(max_length=200)
     app_name = models.CharField(max_length=200)
@@ -35,6 +36,8 @@ class UploadedApp(models.Model):
     image1 = models.ImageField(upload_to='images/')
     image2 = models.ImageField(upload_to='images/',blank=True,null=True)
     image3 = models.ImageField(upload_to='images/',blank=True,null=True)
+    image4 = models.ImageField(upload_to='images/',blank=True,null=True)
+    image5 = models.ImageField(upload_to='images/',blank=True,null=True)
 
     app = models.FileField(upload_to='apps/')
 
