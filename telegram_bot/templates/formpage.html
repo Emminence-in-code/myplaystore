@@ -36,9 +36,6 @@
               </div>
             </div>
 
-
-
-
             <div class="sm:col-span-4">
               <label
                 htmlFor="email"
@@ -97,24 +94,20 @@
               </div>
             </div>
 
-                   <div class="sm:col-span-4">
-              <label
-                htmlFor="desc"
-                class="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Description
+            <div class="sm:col-span-4">
+              <label htmlFor="desc" class="block text-sm font-medium leading-6">
+                App Description
               </label>
               <div class="mt-2">
                 <textarea
-                rows='4'
-
+                  rows="4"
                   required
-                  placeholder='describe what your app does'
+                  placeholder="Describe what your app does"
                   id="desc"
                   name="desc"
                   type="text"
                   autocomplete="text"
-                  class="block w-full rounded-md border-0 px-5 py-1.5 h-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 bg-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 px-5 py-1.5 h-20 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 ></textarea>
               </div>
             </div>
@@ -187,7 +180,7 @@
               <div class="mt-2">
                 <input
                   required
-                  type="text"
+                  type="number"
                   name="estimated_size"
                   id="file_size"
                   autocomplete="address-level2"
@@ -204,25 +197,30 @@
         class="w-full py-9 bg-gray-50 rounded-2xl border border-gray-300 gap-3 grid border-dashed"
       >
         <div class="grid gap-1">
-          <svg
+          <!-- todo  -->
+          <img
             class="mx-auto"
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <!-- todo  -->
-            <!-- <PaperClipIcon class="text-indigo-600" /> -->
-          </svg>
+            src="https://img.icons8.com/?size=100&id=M2cl25ri0PO2&format=png&color=7950F2"
+            alt=""
+          />
           <h2 class="text-center text-gray-400 text-xs leading-4">
-            APP file less than 2GB
+            Apk file less than 2GB <br />
+            <i class="text-red-300">for ios apps contact our dev team</i>
+            <br />
+            <i class="text-gray-600" id="file_name"></i>
           </h2>
         </div>
         <div class="grid gap-2">
           <div class="flex items-center justify-center">
             <label>
-              <input type="file" name="app" />
+              <input
+                type="file"
+                hidden
+                name="app"
+                onchange="validateFile()"
+                id="apkFile"
+                accept=".apk,application/vnd.android.package-archive"
+              />
               <div
                 class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
               >
@@ -232,62 +230,72 @@
           </div>
         </div>
       </div>
+      <div style="justify-content: center" class="d-flex text-center">
+        <div class="max-w-sm space-y-3 mt-16 mx-auto">
+          <h3 class="mb-5 text-xl text-center">App Logo And ScreenShots</h3>
 
-      <div class="max-w-sm space-y-3 mt-16">
-        <h3 class="mb-5 text-xl text-center">Shots For Your App</h3>
+          <fieldset class="border border-gray-200 p-10 rounded-lg">
+            <legend>
+              <label htmlFor="small-file-input text-start "> App Logo </label>
+            </legend>
 
-        <label htmlFor="small-file-input  " class="sr-only">
-          Choose Image
-        </label>
-        <input
-          required
-          type="file"
-          name="image1"
-          id="small-file-input  "
-          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
-        />
+            <input
+              accept="image/*"
+              required
+              type="file"
+              name="image1"
+              id="small-file-input  "
+              class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
+            />
+          </fieldset>
 
-        <label htmlFor="small-file-input  " class="sr-only">
-          Choose Image
-        </label>
-        <input
-          required
-          type="file"
-          name="image4"
-          id="small-file-input  "
-          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
-        />
-        <label htmlFor="small-file-input  " class="sr-only">
-          Choose Image
-        </label>
-        <input
-          required
-          type="file"
-          name="image5"
-          id="small-file-input  "
-          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
-        />
+          <label htmlFor="small-file-input  " class="sr-only">
+            Choose Image
+          </label>
+          <input
+            accept="image/*"
+            required
+            type="file"
+            name="image4"
+            id="small-file-input  "
+            class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
+          />
+          <label htmlFor="small-file-input  " class="sr-only">
+            Choose Image
+          </label>
+          <input
+            required
+            accept="image/*"
+            type="file"
+            name="image5"
+            id="small-file-input  "
+            class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-2 file:px-4"
+          />
 
-        <label htmlFor="file-input required -medium" class="sr-only">
-          Choose Image
-        </label>
-        <input
-          type="file"
-          name="image2"
-          id="file-input required -medium"
-          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4"
-        />
+          <label htmlFor="file-input required -medium" class="sr-only">
+            Choose Image
+          </label>
+          <input
+            accept="image/*"
+            type="file"
+            name="image2"
+            id="file-input required -medium"
+            class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4"
+          />
 
-        <label htmlFor="large-file-input required " class="sr-only">
-          Choose Image
-        </label>
-        <input
-          type="file"
-          name="image3"
-          id="large-file-input "
-          class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 file:sm:py-5"
-        />
+          <label htmlFor="large-file-input required " class="sr-only">
+            Choose Image
+          </label>
+          <input
+            accept="image/*"
+            type="file"
+            name="image3"
+            id="large-file-input "
+            class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4 file:sm:py-5"
+          />
+        </div>
       </div>
+
       <div class="mt-6 flex items-center justify-end gap-x-6">
         <button
           type="button"
@@ -313,6 +321,28 @@
           alert("Cleared form Succesfully");
         }
       });
+
+      const file_name_display = document.getElementById("file_name");
+
+      function validateFile() {
+        file_name_display.innerText = "";
+
+        const fileInput = document.getElementById("apkFile");
+        const file = fileInput.files[0];
+
+        if (file) {
+          const fileType = file.type;
+          const fileName = file.name;
+          file_name_display.innerText = file.name;
+          if (
+            fileType !== "application/vnd.android.package-archive" &&
+            !fileName.endsWith(".apk")
+          ) {
+            alert("Please select a valid APK file.");
+            fileInput.value = ""; // Clear the input
+          }
+        }
+      }
     </script>
   </body>
 </html>

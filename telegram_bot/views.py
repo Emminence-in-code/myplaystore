@@ -28,6 +28,7 @@ bot = Bot(settings.TELEGRAM_BOT_TOKEN)
 dispatcher = Application.builder().token(bot.token).concurrent_updates(True).read_timeout(4).write_timeout(3).build()
 
 
+
 @api_view(['POST'])
 def index(request):
     update = Update.de_json(request.data,bot=bot)
@@ -65,6 +66,8 @@ def index(request):
 
 @api_view(['POST'])
 def confirmEmail(request,username):
+    username = username.lower()
+
     post_data:dict= request.data
     user = CustomUser.objects.filter(username=username).first()
     if 'email' in post_data.keys():
@@ -85,6 +88,8 @@ def confirmEmail(request,username):
 
 @api_view(['POST'])
 def confirmToken(request,username):
+    username = username.lower()
+
     post_data:dict= request.data
     user = CustomUser.objects.filter(username=username).first()
     token = post_data.get('confirm_token')
@@ -118,7 +123,8 @@ def sendMessage(chatId,message):
     x = requests.post('https://api.telegram.org/bot7335489186:AAGvytPLouKdRyPMkd-ew7Or-SJq73gumsI/sendMessage',{"chat_id":chatId,"text":message,'reply_markup': json.dumps(inline_keyboard)})
 
 
-def formView(request,username):
+def formView(request,username:str):
+    username = username.lower()
     user = CustomUser.objects.filter(username = username)
     if not user.exists():
         initialize(username,username)
@@ -149,13 +155,15 @@ def formView(request,username):
             )
             new_app_upload.save()
             return redirect('success-page')
-        except:
-            messages.error(request,'File Upload Failed')
+        except Exception as e:
+            messages.error(request,'File Upload Failed '+str(e))
 
     return render(request,'formpage.html',{'email':user.email})
 
 
 def validateEmailView(request,username):
+    username = username.lower()
+
     return render(
         request,
         'confirm_email.html',
@@ -164,6 +172,8 @@ def validateEmailView(request,username):
 
 
 def redirect_to_auth(username):
+    username = username.lower()
+
     return redirect('signin',username=username)
 
 
@@ -174,6 +184,8 @@ def successPage(request):
 # !TELEGRAM FUNCTIONS
 
 def initialize(username,full_name):
+    username = username.lower()
+
     if CustomUser.objects.filter(username=username).exists():
         return
     user = CustomUser.objects.create(

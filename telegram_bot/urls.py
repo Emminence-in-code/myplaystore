@@ -10,7 +10,7 @@ urlpatterns = [
     path('auth/<str:username>',views.validateEmailView,name='signin'),
     path('email/<str:username>',views.confirmEmail,name='auth'),
     path('token/<str:username>',views.confirmToken,name='token'),
-    # path('successfull',views.)
+    path('successfull',views.successPage,name='success-page'),
 
 ]
 
