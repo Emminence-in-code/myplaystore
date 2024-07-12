@@ -5,6 +5,8 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from telegram_bot.models import CustomUser
+
 UserModel = get_user_model()
 
 def mail_user(
@@ -59,6 +61,35 @@ def mail_admin(
     recipient_list=[
         # settings.EMAIL_HOST_USER,
         super_user.email]  , # recipient_list is self explainatory
+    html_message=convert_to_html_content,
+    fail_silently=False    # Optional
+    )
+
+
+
+
+def confirm_app_uploaded_mail(
+   url,
+   user:CustomUser
+):
+
+ 
+
+    template_name = "upload_email.html"
+    convert_to_html_content =  render_to_string(
+    template_name=template_name,
+    context={
+        'name':user.username
+    }
+    )
+    plain_message = strip_tags(convert_to_html_content)
+    x = send_mail(
+    subject="Your app Was uploaded Succesfully",
+    message=plain_message,
+    from_email=settings.EMAIL_HOST_USER,
+    recipient_list=[
+        # settings.EMAIL_HOST_USER,
+        user.email]  , # recipient_list is self explainatory
     html_message=convert_to_html_content,
     fail_silently=False    # Optional
     )

@@ -41,6 +41,8 @@ class UploadedApp(models.Model):
 
     app = models.FileField(upload_to='apps/')
 
+    def __str__(self):
+        return f'{self.user.username} uploaded {self.app_name}'
 
     def save(self, *args, **kwargs) -> None:
         # todo SEND EMAIL TO ADMIN THAT A USER UPLOADED APP
@@ -67,4 +69,7 @@ class UploadHistory(models.Model):
     username = models.CharField(max_length=40)
     email = models.EmailField()
     app_name = models.CharField(max_length=100)
-    
+    upload_date = models.DateField(auto_created=True,null = True,blank=True)
+
+    def __str__(self):
+        return f'History for {self.app_name}'

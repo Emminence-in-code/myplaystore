@@ -1,8 +1,7 @@
 import requests
 from telegram import Update
 
-from bot.utils import getOwner
-from telegram_bot.models import CustomUser
+# from telegram_bot.models import CustomUser
 
 REPLY_URL = 'https://api.telegram.org/bot7335489186:AAGvytPLouKdRyPMkd-ew7Or-SJq73gumsI/sendMessage'
 URL = 'https://myplaystore.pythonanywhere.app'
@@ -43,14 +42,3 @@ def handleAffliate(update:Update,*args, **kwargs):
     })
 
 
-
-def informOwner(message):
-    owner = getOwner()
-    requests.post(REPLY_URL,json={
-        'chat_id':owner,
-        'text':message,
-        'reply_markup':{
-            'inline_keyboard':[
-            [{'text':'Check App','web_app':{'url':f'https://myplaystore.pythonanywhere.com/admin/telegram_bot/uploadedapp/'}}],
-        ]}
-    })
