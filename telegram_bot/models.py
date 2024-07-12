@@ -61,3 +61,10 @@ class UploadedApp(models.Model):
                     print('erro occured during delete '+str(err))
 
         return super().delete(*args, **kwargs)
+
+
+class UploadHistory(models.Model):
+    username = models.CharField(max_length=40)
+    email = models.EmailField()
+    app_name = models.CharField(max_length=100)
+    
