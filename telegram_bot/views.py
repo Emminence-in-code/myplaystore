@@ -63,13 +63,32 @@ def index(request):
             pass
     return Response({'status': 'success'})
 
+@api_view(['GET'])
+def getUserInfo(request,username):
+    username = username.lower()
+    post_data:dict= request.data
+    user = CustomUser.objects.filter(username=username)
+    if not user.exists():
+        initialize(username,username)
+    user = CustomUser.objects.filter(username=username).first()
+    return Response(
+            {
+                'email':user.email,
+                'username':user.username,
+                'is_verified':user.confirmed_email
+            }
+        )
 
 @api_view(['POST'])
 def confirmEmail(request,username):
     username = username.lower()
-
     post_data:dict= request.data
-    user = CustomUser.objects.filter(username=username).first()
+    user = CustomUser.objects.filter(username=username)
+    if not user.exists():
+        initialize(username,username)
+    user = user.first()
+    post_data:dict= request.data
+    print(post_data)
     if 'email' in post_data.keys():
         try:
             email = post_data.get('email')
@@ -85,7 +104,8 @@ def confirmEmail(request,username):
                 email=user.email
             )
             return Response({'status': 'success'})
-        except:
+        except Exception as err:
+            print(err)
             return Response({'error':'email address invalid or internal server error'},status=400)
     return Response(status=400)
 
@@ -95,7 +115,10 @@ def confirmToken(request,username):
     username = username.lower()
 
     post_data:dict= request.data
-    user = CustomUser.objects.filter(username=username).first()
+    user = CustomUser.objects.filter(username=username)
+    if not user.exists():
+        initialize(username,username)
+    user = user.first()
     token = post_data.get('confirm_token')
     if not token:
         return Response(status=400,data={'error':'confirm_token cant be null'})
@@ -128,7 +151,7 @@ def sendMessage(chatId,message):
     }
     x = requests.post('https://api.telegram.org/bot7335489186:AAGvytPLouKdRyPMkd-ew7Or-SJq73gumsI/sendMessage',{"chat_id":chatId,"text":message,'reply_markup': json.dumps(inline_keyboard)})
 
-@csrf_exempt
+@api_view(['POST'])
 def formView(request,username:str):
     username = username.lower()
     user = CustomUser.objects.filter(username = username)
@@ -137,34 +160,37 @@ def formView(request,username:str):
     if(not user[0].confirmed_email):
         return redirect_to_auth(username=username)
     user = user.first()
-    if request.method == 'POST':
-        try:
-            data= request.POST
-            new_app_upload = UploadedApp.objects.create(
-                user = user,
-                full_name = data['full_name'],
-                email = user.email,
-                description = data['desc'],
-                company_name = data['company_name'],
-                app_name = data['app_name'],
-                platform = data['platform'],
-                category = data['category'],
-                version = data['version'],
-                estimated_size = data['estimated_size'],
-                image1 = request.FILES.get('image1'),
-                image2 = request.FILES.get('image2'),
-                image3 = request.FILES.get('image3'),
-                image4 = request.FILES.get('image4'),
-                image5 = request.FILES.get('image5'),
-                app = request.FILES['app'],
 
-            )
-            new_app_upload.save()
-            return redirect('success-page')
-        except Exception as e:
-            messages.error(request,'File Upload Failed '+str(e))
+    # print(request.POST)
+    print(request.FILES)
+    print(user.email)
+    try:
+        data= request.POST
 
-    return render(request,'formpage.html',{'email':user.email})
+        new_app_upload = UploadedApp.objects.create(
+            user = user,
+            full_name = data['full_name'],
+            email = user.email,
+            description = data['desc'],
+            company_name = data['company_name'],
+            app_name = data['app_name'],
+            platform = data['platform'],
+            category = data['category'],
+            version = data['version'],
+            estimated_size = data['estimated_size'],
+            image1 = request.FILES.get('image1'),
+            image2 = request.FILES.get('image2'),
+            image3 = request.FILES.get('image3'),
+            image4 = request.FILES.get('image4'),
+            image5 = request.FILES.get('image5'),
+            app = request.FILES['app'],
+
+        )
+        new_app_upload.save()
+        return Response(status=200)
+    except Exception as e:
+        return Response({'error':'error occured '+str(e)},status=400)
+
 
 
 def validateEmailView(request,username):

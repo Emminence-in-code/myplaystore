@@ -10,6 +10,9 @@ from .models import UploadedApp
 @receiver(post_save,sender=UploadedApp)
 def handle_author_notifications(sender,instance:UploadedApp,created,*args, **kwargs):
     if created:
+        try:
         # todo send email here
-        mail_admin(reverse('admin:index'))
+            mail_admin('https://myplaystore.pythonanywhere.com/admin/telegram_bot/uploadedapp')
+        except:
+            pass
     pass
