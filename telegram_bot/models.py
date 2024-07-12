@@ -1,6 +1,6 @@
 from typing import Any, Iterable
 from django.db import models
-
+from django.core.files.storage import default_storage
 
 # Create your models here.
 def user_directory_path(x,y):
@@ -47,8 +47,17 @@ class UploadedApp(models.Model):
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
-        self.image1.delete()
-        self.image2.delete()
-        self.image3.delete()
-        self.app.delete()
+        items_to_delete:list[models.ImageField] = [
+            self.image1,
+            self.image2,
+            self.image3,
+            self.app,
+        ]
+        for item in items_to_delete:
+            if item:
+                try:
+                    default_storage.delete(item.name)
+                except Exception as err:
+                    print('erro occured during delete '+str(err))
+
         return super().delete(*args, **kwargs)

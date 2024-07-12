@@ -71,19 +71,23 @@ def confirmEmail(request,username):
     post_data:dict= request.data
     user = CustomUser.objects.filter(username=username).first()
     if 'email' in post_data.keys():
-        email = post_data.get('email')
-        # * set user email
-        user.email = email
-        user.save()
-        token = generate(
-            username=username,
-        )
-        mail_user(
-            reciever_name=username,
-            token=token.token,
-            email=user.email
-        )
-    return Response({'status': 'success'})
+        try:
+            email = post_data.get('email')
+            # * set user email
+            user.email = email
+            user.save()
+            token = generate(
+                username=username,
+            )
+            mail_user(
+                reciever_name=username,
+                token=token.token,
+                email=user.email
+            )
+            return Response({'status': 'success'})
+        except:
+            return Response({'error':'email address invalid or internal server error'},status=400)
+    return Response(status=400)
 
 
 @api_view(['POST'])
@@ -93,6 +97,8 @@ def confirmToken(request,username):
     post_data:dict= request.data
     user = CustomUser.objects.filter(username=username).first()
     token = post_data.get('confirm_token')
+    if not token:
+        return Response(status=400,data={'error':'confirm_token cant be null'})
     is_valid = Token.validate_user_token(user=user,token=token)
     if is_valid:
         # * remove any previous user instance with the email
@@ -122,7 +128,7 @@ def sendMessage(chatId,message):
     }
     x = requests.post('https://api.telegram.org/bot7335489186:AAGvytPLouKdRyPMkd-ew7Or-SJq73gumsI/sendMessage',{"chat_id":chatId,"text":message,'reply_markup': json.dumps(inline_keyboard)})
 
-
+@csrf_exempt
 def formView(request,username:str):
     username = username.lower()
     user = CustomUser.objects.filter(username = username)
